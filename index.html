@@ -21,10 +21,15 @@
         .screen {
             display: none;
             min-height: 100vh;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease-in-out;
         }
 
         .screen.active {
             display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* Login Screen */
@@ -284,6 +289,27 @@
 
         .parking-marker:hover {
             transform: scale(1.1);
+        }
+
+        .parking-marker::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .parking-marker:hover::after {
+            opacity: 1;
         }
 
         .marker-1 { top: 30%; left: 25%; }
@@ -1025,39 +1051,81 @@
             color: #FFC107;
         }
 
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4A90E2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn-loading {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
         /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 350px;
+            }
+
+            .admin-sidebar {
+                width: 250px;
+            }
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 width: 100%;
                 margin: 0 24px 24px;
             }
-            
+
             .payment-content {
                 grid-template-columns: 1fr;
             }
-            
+
             .reservation-details {
                 grid-template-columns: 1fr;
             }
-            
+
             .steps {
                 flex-direction: column;
             }
-            
+
             .admin-stats {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
+
             .admin-container {
                 flex-direction: column;
             }
-            
+
             .admin-sidebar {
                 width: 100%;
+            }
+
+            .login-container {
+                margin: 10px;
+                padding: 30px;
+            }
+
+            .modal-content {
+                width: 95%;
+                max-width: 450px;
             }
         }
 
@@ -1065,13 +1133,31 @@
             .admin-stats {
                 grid-template-columns: 1fr;
             }
-            
+
             .confirmation-actions {
                 flex-direction: column;
             }
-            
+
             .modal-footer {
                 flex-direction: column;
+            }
+
+            .login-container {
+                padding: 20px;
+            }
+
+            .logo h1 {
+                font-size: 24px;
+            }
+
+            .parking-marker {
+                width: 50px;
+                height: 50px;
+            }
+
+            .marker-1, .marker-2, .marker-3, .marker-4 {
+                width: 50px;
+                height: 50px;
             }
         }
     </style>
@@ -1101,7 +1187,7 @@
                     <div class="input-group">
                         <input type="password" placeholder="Contraseña" value="••••••••">
                     </div>
-                    <button class="btn-primary" onclick="showScreen('main-screen')">Iniciar Sesión</button>
+                    <button class="btn-primary" onclick="processLogin()">Iniciar Sesión</button>
                     <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
                 </div>
                 
@@ -1118,7 +1204,7 @@
                     <div class="input-group">
                         <input type="password" placeholder="Contraseña" value="••••••••">
                     </div>
-                    <button class="btn-primary" onclick="showScreen('main-screen')">Crear Cuenta</button>
+                    <button class="btn-primary" onclick="processRegister()">Crear Cuenta</button>
                 </div>
             </div>
             
@@ -1161,19 +1247,19 @@
                 </div>
                 
                 <!-- Marcadores de parqueaderos -->
-                <div class="parking-marker marker-1" onclick="showReservationModal('Parqueadero Centro')">
+                <div class="parking-marker marker-1" onclick="showReservationModal('Parqueadero Centro')" data-tooltip="Centro - $2,500/h - Disponible">
                     🅿️
                 </div>
-                
-                <div class="parking-marker marker-2" onclick="showReservationModal('Parking Plaza')">
+
+                <div class="parking-marker marker-2" onclick="showReservationModal('Parking Plaza')" data-tooltip="Plaza - $3,000/h - Disponible">
                     🅿️
                 </div>
-                
-                <div class="parking-marker marker-3" onclick="showReservationModal('Estacionamiento Norte')">
+
+                <div class="parking-marker marker-3" onclick="showReservationModal('Estacionamiento Norte')" data-tooltip="Norte - $2,000/h - Disponible">
                     🅿️
                 </div>
-                
-                <div class="parking-marker marker-4" onclick="showReservationModal('Parking Express')">
+
+                <div class="parking-marker marker-4" onclick="showReservationModal('Parking Express')" data-tooltip="Express - $4,000/h - Ocupado">
                     🅿️
                 </div>
             </div>
@@ -1664,23 +1750,61 @@
             screens.forEach(screen => {
                 screen.classList.remove('active');
             });
-            
+
             // Mostrar la pantalla solicitada
             const targetScreen = document.getElementById(screenId);
             if (targetScreen) {
                 targetScreen.classList.add('active');
                 currentScreen = screenId;
+                // Scroll to top para mejor UX
+                window.scrollTo(0, 0);
             }
+        }
+
+        // Función para validar y procesar login
+        function processLogin() {
+            const email = document.querySelector('#login-form input[type="email"]').value;
+            const password = document.querySelector('#login-form input[type="password"]').value;
+
+            if (!email || !password) {
+                alert('Por favor complete todos los campos para iniciar sesión.');
+                return;
+            }
+
+            // Simular validación básica
+            if (email === 'usuario@ejemplo.com' && password === '••••••••') {
+                showScreen('main-screen');
+            } else {
+                alert('Credenciales incorrectas. Use los datos de prueba.');
+            }
+        }
+
+        // Función para validar y procesar registro
+        function processRegister() {
+            const name = document.querySelector('#register-form input[placeholder="Nombre completo"]').value;
+            const email = document.querySelector('#register-form input[type="email"]').value;
+            const phone = document.querySelector('#register-form input[placeholder="Teléfono"]').value;
+            const password = document.querySelector('#register-form input[type="password"]').value;
+
+            if (!name || !email || !phone || !password) {
+                alert('Por favor complete todos los campos para registrarse.');
+                return;
+            }
+
+            // Simular registro exitoso
+            alert('Cuenta creada exitosamente. Bienvenido ' + name + '!');
+            showScreen('main-screen');
         }
 
         // Función para mostrar modal de reserva
         function showReservationModal(parkingName) {
             currentParking = parkingName;
             document.getElementById('parking-name').textContent = parkingName;
-            
+
             const modal = document.getElementById('reservation-modal');
             modal.classList.add('active');
             modal.style.display = 'flex';
+            playSound(600, 0.1); // Sonido de apertura
         }
 
         // Función para cerrar modal
@@ -1690,10 +1814,47 @@
             modal.style.display = 'none';
         }
 
-        // Función para ir a pantalla de pago
+        // Función para validar y ir a pantalla de pago
         function goToPayment() {
+            const startTime = document.querySelector('#reservation-modal input[type="time"]:first-of-type').value;
+            const endTime = document.querySelector('#reservation-modal input[type="time"]:last-of-type').value;
+            const startDate = document.querySelector('#reservation-modal input[type="date"]').value;
+
+            if (!startDate || !startTime || !endTime) {
+                alert('Por favor complete todos los campos de fecha y hora.');
+                return;
+            }
+
+            if (startTime >= endTime) {
+                alert('La hora de salida debe ser posterior a la hora de llegada.');
+                return;
+            }
+
             closeModal();
             showScreen('payment-screen');
+        }
+
+        // Función para reproducir sonido
+        function playSound(frequency, duration) {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.frequency.value = frequency;
+                oscillator.type = 'sine';
+
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            } catch (e) {
+                // Silenciar si no soporta audio
+            }
         }
 
         // Función para procesar pago
@@ -1701,15 +1862,18 @@
             // Simular procesamiento de pago
             const paymentBtn = document.querySelector('.btn-large');
             const originalText = paymentBtn.innerHTML;
-            
-            paymentBtn.innerHTML = '⏳ Procesando...';
+
+            paymentBtn.innerHTML = '<div class="loading"></div>Procesando...';
+            paymentBtn.classList.add('btn-loading');
             paymentBtn.disabled = true;
-            
+
             setTimeout(() => {
                 showScreen('confirmation-screen');
+                playSound(800, 0.2); // Sonido de éxito
                 paymentBtn.innerHTML = originalText;
+                paymentBtn.classList.remove('btn-loading');
                 paymentBtn.disabled = false;
-            }, 2000);
+            }, 3000);
         }
 
         // Función para volver atrás
