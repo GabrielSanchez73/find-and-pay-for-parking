@@ -129,9 +129,9 @@ Prototipo funcional de una aplicación web para encontrar y reservar espacios de
 
 ## Enlace al Prototipo
 
-Accede al prototipo funcional en: [https://tuusuario.github.io/maquillaje](https://tuusuario.github.io/maquillaje)
+Accede al prototipo funcional en: [https://gabrielsanchez73.github.io/find-and-pay-for-parking/](https://gabrielsanchez73.github.io/find-and-pay-for-parking/)
 
-*Nota: Reemplaza "tuusuario" con tu nombre de usuario de GitHub.*
+*Nota: Asegúrate de que GitHub Pages esté habilitado en Settings > Pages del repositorio.*
 
 ## Datos de Prueba
 
