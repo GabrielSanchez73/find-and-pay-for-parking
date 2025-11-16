@@ -1399,9 +1399,9 @@
         </div>
     </div>
 
-    <!-- Pantalla de Pago -->
-    <div id="payment-screen" class="screen">
-        <div class="payment-container">
+    <!-- Modal de Pago -->
+    <div id="payment-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 1000; display: none; align-items: center; justify-content: center;">
+        <div class="payment-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
             <div class="payment-header">
                 <button class="back-btn" onclick="goBack()">←</button>
                 <h1>Procesar Pago</h1>
@@ -1469,9 +1469,9 @@
         </div>
     </div>
 
-    <!-- Pantalla de Confirmación -->
-    <div id="confirmation-screen" class="screen">
-        <div class="confirmation-container">
+    <!-- Modal de Confirmación -->
+    <div id="confirmation-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 1000; display: none; align-items: center; justify-content: center;">
+        <div class="confirmation-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
             <div class="success-animation">
                 <div class="success-icon"></div>
                 <h1>¡Reserva Exitosa!</h1>
@@ -1839,7 +1839,7 @@
             }
 
             closeModal();
-            showScreen('payment-screen');
+            document.getElementById('payment-modal').style.display = 'flex';
         }
 
         // Función para reproducir sonido
@@ -1876,7 +1876,8 @@
             paymentBtn.disabled = true;
 
             setTimeout(() => {
-                showScreen('confirmation-screen');
+                document.getElementById('payment-modal').style.display = 'none';
+                document.getElementById('confirmation-modal').style.display = 'flex';
                 playSound(800, 0.2); // Sonido de éxito
                 paymentBtn.innerHTML = originalText;
                 paymentBtn.classList.remove('btn-loading');
@@ -1886,20 +1887,19 @@
 
         // Función para volver atrás
         function goBack() {
-            if (currentScreen === 'payment-screen') {
-                showScreen('main-screen');
-            } else if (currentScreen === 'confirmation-screen') {
-                showScreen('main-screen');
-            }
+            document.getElementById('payment-modal').style.display = 'none';
+            document.getElementById('confirmation-modal').style.display = 'none';
         }
 
         // Función para descargar comprobante
         function downloadTicket() {
+            document.getElementById('confirmation-modal').style.display = 'none';
             alert('Comprobante descargado exitosamente');
         }
 
         // Función para ver historial
         function viewHistory() {
+            document.getElementById('confirmation-modal').style.display = 'none';
             alert('Funcionalidad de historial en desarrollo');
         }
 
