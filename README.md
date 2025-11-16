@@ -135,10 +135,11 @@ Accede al prototipo funcional en: [https://gabrielsanchez73.github.io/find-and-p
 
 ## Datos de Prueba
 
-- Usuarios: María González, Carlos Rodríguez, Ana Martínez
-- Parqueaderos: Centro, Plaza, Norte, Express
-- Precios: $2,000 - $4,000 por hora
+- **Login**: usuario@ejemplo.com / •••••••• (8 puntos)
+- **Registro**: María González / maria@ejemplo.com / +57 300 123 4567 / ••••••••
+- Parqueaderos: Centro ($2,500/h), Plaza ($3,000/h), Norte ($2,000/h), Express ($4,000/h - Ocupado)
 - Ubicaciones: Calles de Bogotá, Colombia
+- Reserva: Fecha 2024-01-15, Llegada 14:30, Salida 16:30 (2 horas)
 
 ## Criterios que cumple el prototipo de alto nivel
 
