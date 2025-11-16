@@ -64,12 +64,12 @@ Prototipo funcional de una aplicación web para encontrar y reservar espacios de
 ## Flujo de Usuario Detallado
 
 ### 1. Autenticación (Login/Registro)
-- **Acción del usuario**: El usuario llega a la aplicación y ve la pantalla de login/registro.
+- **Acción del usuario**: El usuario llega a la aplicación y ve un modal de login/registro sobre el mapa.
 - **Interacciones**:
   - Cambiar entre pestañas "Iniciar Sesión" y "Registrarse" usando los botones de pestaña.
   - Ingresar datos en los campos de formulario (email, contraseña, nombre, teléfono).
   - Hacer clic en "Iniciar Sesión" o "Crear Cuenta" para proceder (con validación automática de campos completos).
-- **Resultado**: Navegación automática a la pantalla principal del mapa tras validación exitosa.
+- **Resultado**: El modal se oculta automáticamente tras validación exitosa, revelando el mapa interactivo.
 
 ### 2. Exploración del Mapa
 - **Acción del usuario**: Visualización del mapa interactivo con marcadores.
