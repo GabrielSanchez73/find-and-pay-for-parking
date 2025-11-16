@@ -37,7 +37,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            padding: 20px 0;
         }
 
         .login-container {
@@ -162,6 +162,24 @@
             color: #4A90E2;
             font-weight: 500;
             margin-bottom: 10px;
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 10px;
+            background: #28A745;
+            color: white;
+            font-weight: 600;
+            animation: welcomeFade 3s ease-in-out;
+            margin: 10px 24px;
+            border-radius: 8px;
+        }
+
+        @keyframes welcomeFade {
+            0% { opacity: 0; transform: translateY(-10px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
         }
 
         /* Main Screen */
@@ -1242,6 +1260,8 @@
                 </div>
             </div>
         </header>
+
+        <div class="welcome-message" id="welcome-msg">¡Bienvenido! Explora el mapa de parqueaderos abajo</div>
 
         <div class="main-content">
             <div class="map-container">
