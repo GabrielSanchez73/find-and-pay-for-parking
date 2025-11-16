@@ -35,32 +35,6 @@ Prototipo funcional de una aplicación web para encontrar y reservar espacios de
 └── README.md          # Este archivo
 ```
 
-## Capturas de Pantalla
-
-### Pantalla de Login/Registro
-![Pantalla de Login](screenshots/login-screen.png)
-*Vista inicial donde el usuario puede iniciar sesión o registrarse.*
-
-### Mapa Interactivo
-![Mapa Principal](screenshots/main-map.png)
-*Vista del mapa con marcadores de parqueaderos disponibles y lista lateral.*
-
-### Modal de Reserva
-![Modal de Reserva](screenshots/reservation-modal.png)
-*Formulario para seleccionar fecha, hora, duración y vehículo.*
-
-### Pantalla de Pago
-![Pantalla de Pago](screenshots/payment-screen.png)
-*Selección de método de pago y resumen de la reserva.*
-
-### Confirmación de Reserva
-![Confirmación](screenshots/confirmation-screen.png)
-*Pantalla de éxito con detalles de la reserva y código QR.*
-
-### Panel Administrativo
-![Panel Admin](screenshots/admin-dashboard.png)
-*Dashboard para gestión de usuarios, espacios y reportes.*
-
 ## Flujo de Usuario Detallado
 
 ### 1. Autenticación (Login/Registro)
