@@ -158,6 +158,12 @@
             color: #6C757D;
         }
 
+        .help-text {
+            color: #4A90E2;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
         /* Main Screen */
         .main-header {
             background: white;
@@ -1209,6 +1215,7 @@
             </div>
             
             <div class="login-footer">
+                <p class="help-text">Completa los campos con los datos de prueba (usuario@ejemplo.com / ••••••••) y haz clic en "Iniciar Sesión" para acceder al mapa.</p>
                 <p>Al continuar, aceptas nuestros <a href="#">Términos y Condiciones</a></p>
             </div>
         </div>
@@ -1330,17 +1337,17 @@
                 <div class="reservation-form">
                     <div class="form-group">
                         <label>Fecha de llegada</label>
-                        <input type="date" value="2024-01-15">
+                        <input type="date" value="2024-01-15" id="reservation-date">
                     </div>
-                    
+
                     <div class="form-row">
                         <div class="form-group">
                             <label>Hora de llegada</label>
-                            <input type="time" value="14:30">
+                            <input type="time" value="14:30" id="start-time">
                         </div>
                         <div class="form-group">
                             <label>Hora de salida</label>
-                            <input type="time" value="16:30">
+                            <input type="time" value="16:30" id="end-time">
                         </div>
                     </div>
                     
@@ -1816,9 +1823,9 @@
 
         // Función para validar y ir a pantalla de pago
         function goToPayment() {
-            const startTime = document.querySelector('#reservation-modal input[type="time"]:first-of-type').value;
-            const endTime = document.querySelector('#reservation-modal input[type="time"]:last-of-type').value;
-            const startDate = document.querySelector('#reservation-modal input[type="date"]').value;
+            const startTime = document.getElementById('start-time').value;
+            const endTime = document.getElementById('end-time').value;
+            const startDate = document.getElementById('reservation-date').value;
 
             if (!startDate || !startTime || !endTime) {
                 alert('Por favor complete todos los campos de fecha y hora.');
@@ -1826,7 +1833,7 @@
             }
 
             if (startTime >= endTime) {
-                alert('La hora de salida debe ser posterior a la hora de llegada.');
+                alert('La hora de salida debe ser posterior a la hora de llegada. Ejemplo: llegada 14:30, salida 16:30.');
                 return;
             }
 
